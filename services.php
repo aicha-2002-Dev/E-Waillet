@@ -53,3 +53,53 @@ function traiterDepot(string $tel, float $montant) : int {
     ajouterTransaction($transaction);
     return 1;
 }
+
+
+function calculerFraisRetrait(float $montant) :float {
+    if ($montant <= 10000){
+        return 200.0;
+    }
+
+    if ($montant <= 100000){
+        return 500.0;
+    }
+
+    if ($montant > 100000){
+        $frais = $montant * 0.01;
+        if ($frais > 5000){
+            return 5000.0;
+        }
+        return $frais;
+    }
+}
+function traiterRetrait(string $tel, float $montant) :int {
+
+    $index = trouverWallet($tel);
+    if ($index === -1){
+        return -1;
+    }
+    if ($montant <= 0){
+        return -2;
+    }
+    $frais = calculerFraisRetrait($montant);
+    $totalADebiter = $montant + $frais;
+
+    global $wallets;
+    $soldeActuel = $wallets[$index]['solde'];
+    if($totalADebiter > $soldeActuel){
+        return -3;
+    }
+    $nouveauSolde = $soldeActuel - $totalADebiter;
+    modifierSolde($index,$nouveauSolde);
+
+    $transaction = [
+        'numero' => $tel,
+        'type'   => 'retrait',
+        'montant'=> $montant,
+        'frais' => $frais
+    ];
+    ajouterTransaction($transaction);
+
+    return 1;
+    
+}

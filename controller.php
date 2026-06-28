@@ -53,3 +53,30 @@ function declencherDepot(): void {
             break;
     }
 }
+
+function declencherRetrait() :void{
+    echo " \n--- EFFECTUER UN RETRAIT ---\n";
+    $tel = saisir("Numero de telephone : ");
+    $montant = (float)saisir("Montant a retirer : ");
+    $statut = traiterRetrait($tel, $montant);
+    switch($statut){
+        case 1:
+            $frais = calculerFraisRetrait($montant);
+            $total = $montant + $frais;
+            echo "Succes: le retrait a ete effectue ! \n";
+            echo "Montant retiré : " . $montant . " CFA\n";
+            echo "Frais appliqués : " . $frais . " CFA\n";
+            echo "Total débité : " . $total . " CFA\n";
+            break;
+        case -1:
+            echo "Erreur : Aucun wallet n'est associe a ce num de telephone!\n";
+            break;
+        case -2:
+            echo "Erreur : Le montant du retrait doit etre superieur a 0!\n";
+            break;
+        case -3;
+            $frais = calculerFraisRetrait($montant);
+            echo "Erreur : Solde insuffisant !\n";
+            break;                 
+    }
+}

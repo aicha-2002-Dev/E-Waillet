@@ -23,7 +23,8 @@ while(true){
             declencherDepot();
             break;
         case '3':
-        break;
+            declencherRetrait();
+            break;
         case '4':
         break;
         case '0': exit("Au revoir! \n");
